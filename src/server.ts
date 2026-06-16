@@ -1,27 +1,25 @@
-const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
+import express, { type Application, type Request, type Response } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { connectDB } from './config/database.js';
 
-// Load biến môi trường
 dotenv.config();
 
-const dbName = process.env.DB_NAME as string;
-const dbUser = process.env.DB_USER as string;
-const dbPassword = process.env.DB_PASSWORD;
-const dbHost = process.env.DB_HOST;
+const app: Application = express();
 
-const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-    host: dbHost,
-    dialect: 'mysql',
-    logging: false, // Tắt log query trên terminal
+// Middlewares  
+app.use(cors());
+app.use(express.json());
+
+// Test Route
+app.get('/', (req: Request, res: Response) => {
+    res.json({ message: 'API Dat ve xem phim dang hoat dong!' });
 });
 
-const connectDB = async (): Promise<void> => {
-    try {
-        await sequelize.authenticate();
-        console.log('✅ Kết nối Database thành công!');
-    } catch (error) {
-        console.error('❌ Kết nối Database thất bại:', error);
-    }
-};
+// Khoi dong server
+const PORT = process.env.PORT || 3000;
 
-module.exports = { sequelize, connectDB };
+app.listen(PORT, async () => {
+    console.log(`Server dang chay tai http://localhost:${PORT}`);
+    await connectDB();
+});
