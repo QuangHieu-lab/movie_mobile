@@ -1,0 +1,27 @@
+# Các thư viện được cài đặt (chúng ta không push lên Git, người khác tải code về sẽ chạy npm install để cài lại)
+node_modules/
+
+# File chứa biến môi trường và mật khẩu (Cực kỳ quan trọng phải ẩn)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Thư mục chứa code TypeScript đã được biên dịch ra JavaScript (Nếu sau này bạn build production)
+build/
+dist/
+out/
+
+# Các file sinh ra bởi hệ điều hành (Windows/Mac)
+.DS_Store
+Thumbs.db
+
+# File log của npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# File log chung
+logs
+*.log
