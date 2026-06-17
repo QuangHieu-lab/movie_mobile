@@ -1,27 +1,46 @@
-const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
+import cors from 'cors';
+import express from 'express';
+import dotenv from 'dotenv';
+import { connectDB, sequelize } from './config/database';
+import './models';
+import authRoutes from './routes/auth.routes';
+import movieRoutes from './routes/movie.routes';
+import showtimeRoutes from './routes/showtime.routes';
+import bookingRoutes from './routes/booking.routes';
 
-// Load biến môi trường
 dotenv.config();
 
-const dbName = process.env.DB_NAME as string;
-const dbUser = process.env.DB_USER as string;
-const dbPassword = process.env.DB_PASSWORD;
-const dbHost = process.env.DB_HOST;
+const app = express();
+const port = Number(process.env.PORT || 3000);
 
-const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-    host: dbHost,
-    dialect: 'mysql',
-    logging: false, // Tắt log query trên terminal
+app.use(cors());
+app.use(express.json());
+
+app.get('/health', (_req, res) => {
+    res.json({ status: 'ok', service: 'movie_mobile_api' });
 });
 
-const connectDB = async (): Promise<void> => {
+app.use('/api/auth', authRoutes);
+app.use('/api/movies', movieRoutes);
+app.use('/api/showtimes', showtimeRoutes);
+app.use('/api/bookings', bookingRoutes);
+
+const startServer = async (): Promise<void> => {
     try {
-        await sequelize.authenticate();
-        console.log('✅ Kết nối Database thành công!');
+        await connectDB();
+
+        if (process.env.DB_SYNC === 'true') {
+            await sequelize.sync({ alter: true });
+            console.log('Đồng bộ models với database thành công!');
+        }
+
+        app.listen(port, () => {
+            console.log(`Server đang chạy tại http://localhost:${port}`);
+        });
     } catch (error) {
-        console.error('❌ Kết nối Database thất bại:', error);
+        console.error('Không thể khởi động server:', error);
+        process.exit(1);
     }
 };
 
-module.exports = { sequelize, connectDB };
+void startServer();
