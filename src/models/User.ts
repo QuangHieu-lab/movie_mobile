@@ -7,10 +7,11 @@ interface UserAttributes {
     email: string;
     phone?: string | null;
     password_hash: string;
+    date_of_birth?: string | null;
     created_at?: Date;
 }
 
-type UserCreationAttributes = Optional<UserAttributes, 'user_id' | 'phone' | 'created_at'>;
+type UserCreationAttributes = Optional<UserAttributes, 'user_id' | 'phone' | 'date_of_birth' | 'created_at'>;
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public user_id!: number;
@@ -18,6 +19,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public email!: string;
     public phone!: string | null;
     public password_hash!: string;
+    public date_of_birth!: string | null;
     public created_at!: Date;
 }
 
@@ -28,6 +30,7 @@ User.init(
         email: { type: DataTypes.STRING(100), allowNull: false, unique: true },
         phone: { type: DataTypes.STRING(20), allowNull: true, unique: true },
         password_hash: { type: DataTypes.STRING(255), allowNull: false },
+        date_of_birth: { type: DataTypes.DATEONLY, allowNull: true },
         created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     },
     {

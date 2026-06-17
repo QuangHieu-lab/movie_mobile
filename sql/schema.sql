@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS Users (
     email VARCHAR(100) UNIQUE NOT NULL,
     phone VARCHAR(20) UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    date_of_birth DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS Movies (
     title VARCHAR(255) NOT NULL,
     status ENUM('UPCOMING', 'NOW_SHOWING', 'ENDED') DEFAULT 'UPCOMING',
     duration_minutes INT,
+    age_restriction INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

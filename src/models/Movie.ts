@@ -9,10 +9,11 @@ interface MovieAttributes {
     title: string;
     status: MovieStatus;
     duration_minutes?: number | null;
+    age_restriction?: number;
     created_at?: Date;
 }
 
-type MovieCreationAttributes = Optional<MovieAttributes, 'movie_id' | 'status' | 'duration_minutes' | 'created_at'>;
+type MovieCreationAttributes = Optional<MovieAttributes, 'movie_id' | 'status' | 'duration_minutes' | 'age_restriction' | 'created_at'>;
 
 class Movie extends Model<MovieAttributes, MovieCreationAttributes> implements MovieAttributes {
     public movie_id!: number;
@@ -20,6 +21,7 @@ class Movie extends Model<MovieAttributes, MovieCreationAttributes> implements M
     public title!: string;
     public status!: MovieStatus;
     public duration_minutes!: number | null;
+    public age_restriction!: number;
     public created_at!: Date;
 }
 
@@ -30,6 +32,7 @@ Movie.init(
         title: { type: DataTypes.STRING(255), allowNull: false },
         status: { type: DataTypes.ENUM('UPCOMING', 'NOW_SHOWING', 'ENDED'), defaultValue: 'UPCOMING' },
         duration_minutes: { type: DataTypes.INTEGER, allowNull: true },
+        age_restriction: { type: DataTypes.INTEGER, defaultValue: 0 },
         created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     },
     { sequelize, modelName: 'Movie', tableName: 'Movies', timestamps: false },
