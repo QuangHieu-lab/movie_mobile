@@ -1,25 +1,46 @@
-import express, { type Application, type Request, type Response } from 'express';
 import cors from 'cors';
+import express from 'express';
 import dotenv from 'dotenv';
-import { connectDB } from './config/database.js';
+import { connectDB, sequelize } from './config/database';
+import './models';
+import authRoutes from './routes/auth.routes';
+import movieRoutes from './routes/movie.routes';
+import showtimeRoutes from './routes/showtime.routes';
+import bookingRoutes from './routes/booking.routes';
 
 dotenv.config();
 
-const app: Application = express();
+const app = express();
+const port = Number(process.env.PORT || 3000);
 
-// Middlewares  
 app.use(cors());
 app.use(express.json());
 
-// Test Route
-app.get('/', (req: Request, res: Response) => {
-    res.json({ message: 'API Dat ve xem phim dang hoat dong!' });
+app.get('/health', (_req, res) => {
+    res.json({ status: 'ok', service: 'movie_mobile_api' });
 });
 
-// Khoi dong server
-const PORT = process.env.PORT || 3000;
+app.use('/api/auth', authRoutes);
+app.use('/api/movies', movieRoutes);
+app.use('/api/showtimes', showtimeRoutes);
+app.use('/api/bookings', bookingRoutes);
 
-app.listen(PORT, async () => {
-    console.log(`Server dang chay tai http://localhost:${PORT}`);
-    await connectDB();
-});
+const startServer = async (): Promise<void> => {
+    try {
+        await connectDB();
+
+        if (process.env.DB_SYNC === 'true') {
+            await sequelize.sync({ alter: true });
+            console.log('Đồng bộ models với database thành công!');
+        }
+
+        app.listen(port, () => {
+            console.log(`Server đang chạy tại http://localhost:${port}`);
+        });
+    } catch (error) {
+        console.error('Không thể khởi động server:', error);
+        process.exit(1);
+    }
+};
+
+void startServer();
