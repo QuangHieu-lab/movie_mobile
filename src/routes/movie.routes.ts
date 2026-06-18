@@ -17,14 +17,14 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const { api_movie_id, title, status, duration_minutes } = req.body;
+        const { api_movie_id, title, status, duration_minutes, age_restriction } = req.body;
 
         if (!api_movie_id || !title) {
             res.status(400).json({ message: 'api_movie_id and title are required' });
             return;
         }
 
-        const movie = await Movie.create({ api_movie_id, title, status, duration_minutes });
+        const movie = await Movie.create({ api_movie_id, title, status, duration_minutes, age_restriction });
         res.status(201).json(movie);
     } catch (error) {
         res.status(500).json({ message: 'Cannot create movie', error });

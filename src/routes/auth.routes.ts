@@ -7,7 +7,7 @@ const router = Router();
 
 router.post('/register', async (req, res) => {
     try {
-        const { full_name, email, phone, password } = req.body;
+        const { full_name, email, phone, date_of_birth, password } = req.body;
 
         if (!full_name || !email || !password) {
             res.status(400).json({ message: 'full_name, email, and password are required' });
@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
         }
 
         const password_hash = await bcrypt.hash(password, 10);
-        const user = await User.create({ full_name, email, phone, password_hash });
+        const user = await User.create({ full_name, email, phone, date_of_birth, password_hash });
         const token = signToken(user.user_id);
 
         res.status(201).json({
@@ -31,6 +31,7 @@ router.post('/register', async (req, res) => {
                 full_name: user.full_name,
                 email: user.email,
                 phone: user.phone,
+                date_of_birth: user.date_of_birth,
             },
         });
     } catch (error) {
@@ -66,6 +67,7 @@ router.post('/login', async (req, res) => {
                 full_name: user.full_name,
                 email: user.email,
                 phone: user.phone,
+                date_of_birth: user.date_of_birth,
             },
         });
     } catch (error) {
