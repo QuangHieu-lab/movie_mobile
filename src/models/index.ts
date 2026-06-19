@@ -7,6 +7,7 @@ import Seat from './Seat';
 import Showtime from './Showtime';
 import Snack from './Snack';
 import User from './User';
+import Payment from './Payment';
 
 User.hasMany(Booking, { foreignKey: 'user_id' });
 Booking.belongsTo(User, { foreignKey: 'user_id' });
@@ -38,6 +39,9 @@ BookingSnack.belongsTo(Booking, { foreignKey: 'booking_id' });
 Snack.hasMany(BookingSnack, { foreignKey: 'snack_id' });
 BookingSnack.belongsTo(Snack, { foreignKey: 'snack_id' });
 
+Booking.hasMany(Payment, { foreignKey: 'booking_id' });
+Payment.belongsTo(Booking, { foreignKey: 'booking_id' });
+
 export {
     Booking,
     BookingSeat,
@@ -45,6 +49,7 @@ export {
     Movie,
     Room,
     Seat,
+    Payment,
     Showtime,
     Snack,
     User,

@@ -9,7 +9,7 @@ interface MovieAttributes {
     title: string;
     status: MovieStatus;
     duration_minutes?: number | null;
-    age_restriction: number;
+    age_restriction?: number;
     created_at?: Date;
 }
 

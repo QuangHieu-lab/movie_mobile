@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS Users (
     phone VARCHAR(20) UNIQUE,
     date_of_birth DATE,
     password_hash VARCHAR(255) NOT NULL,
+    date_of_birth DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

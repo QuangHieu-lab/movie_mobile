@@ -7,10 +7,10 @@ const router = Router();
 
 router.post('/register', async (req, res) => {
     try {
-        const { full_name, email, phone, date_of_birth, password } = req.body;
+        const { full_name, email, phone, password, date_of_birth } = req.body;
 
-        if (!full_name || !email || !password) {
-            res.status(400).json({ message: 'full_name, email, and password are required' });
+        if (!full_name || !email || !password || !date_of_birth) {
+            res.status(400).json({ message: 'full_name, email, password, and date_of_birth are required' });
             return;
         }
 
@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
         }
 
         const password_hash = await bcrypt.hash(password, 10);
-        const user = await User.create({ full_name, email, phone, date_of_birth, password_hash });
+        const user = await User.create({ full_name, email, phone, password_hash, date_of_birth });
         const token = signToken(user.user_id);
 
         res.status(201).json({
