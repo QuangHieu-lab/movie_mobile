@@ -6,6 +6,7 @@ interface UserAttributes {
     full_name: string;
     email: string;
     phone?: string | null;
+    date_of_birth?: Date | string | null;
     password_hash: string;
     date_of_birth?: string | null;
     created_at?: Date;
@@ -18,6 +19,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public full_name!: string;
     public email!: string;
     public phone!: string | null;
+    public date_of_birth!: Date | string | null;
     public password_hash!: string;
     public date_of_birth!: string | null;
     public created_at!: Date;
@@ -29,6 +31,7 @@ User.init(
         full_name: { type: DataTypes.STRING(100), allowNull: false },
         email: { type: DataTypes.STRING(100), allowNull: false, unique: true },
         phone: { type: DataTypes.STRING(20), allowNull: true, unique: true },
+        date_of_birth: { type: DataTypes.DATEONLY, allowNull: true },
         password_hash: { type: DataTypes.STRING(255), allowNull: false },
         date_of_birth: { type: DataTypes.DATEONLY, allowNull: true },
         created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
