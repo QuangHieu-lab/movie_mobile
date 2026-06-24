@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS Users (
     phone VARCHAR(20) UNIQUE,
     date_of_birth DATE,
     password_hash VARCHAR(255) NOT NULL,
-    date_of_birth DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -120,4 +119,24 @@ CREATE TABLE IF NOT EXISTS Booking_Snacks (
     CONSTRAINT fk_booking_snacks_snack
         FOREIGN KEY (snack_id) REFERENCES Snacks(snack_id)
         ON DELETE RESTRICT
+);
+
+CREATE TABLE IF NOT EXISTS Payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT NOT NULL,
+    order_id VARCHAR(100) NOT NULL UNIQUE,
+    transaction_reference VARCHAR(255) UNIQUE,
+    amount DECIMAL(10, 2) NOT NULL,
+    payment_method ENUM('VNPAY', 'MOMO', 'ZALOPAY', 'CREDIT_CARD', 'CASH') NOT NULL,
+    payment_status ENUM('PENDING', 'SUCCESS', 'FAILED', 'EXPIRED', 'REFUNDED') DEFAULT 'PENDING',
+    gateway_response_code VARCHAR(50),
+    raw_response_log JSON,
+    paid_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_payments_booking
+        FOREIGN KEY (booking_id) REFERENCES Bookings(booking_id)
+        ON DELETE CASCADE,
+    INDEX idx_payments_booking (booking_id),
+    INDEX idx_payments_order_id (order_id)
 );

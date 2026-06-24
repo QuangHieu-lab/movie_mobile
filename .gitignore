@@ -7,7 +7,6 @@ node_modules/
 .env.development
 .env.test
 .env.production
-.env.example
 # Thư mục chứa code TypeScript đã được biên dịch ra JavaScript (Nếu sau này bạn build production)
 build/
 dist/
