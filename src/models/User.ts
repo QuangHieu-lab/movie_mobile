@@ -29,8 +29,8 @@ User.init(
         full_name: { type: DataTypes.STRING(100), allowNull: false },
         email: { type: DataTypes.STRING(100), allowNull: false, unique: true },
         phone: { type: DataTypes.STRING(20), allowNull: true, unique: true },
-        date_of_birth: { type: DataTypes.DATEONLY, allowNull: true },
         password_hash: { type: DataTypes.STRING(255), allowNull: false },
+        date_of_birth: { type: DataTypes.DATEONLY, allowNull: true }, // Khai báo 1 lần trong object
         created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     },
     {
@@ -38,7 +38,7 @@ User.init(
         modelName: 'User',
         tableName: 'Users',
         timestamps: false,
-    },
+    }
 );
 
 export default User;
