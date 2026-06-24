@@ -32,7 +32,7 @@ Movie.init(
         title: { type: DataTypes.STRING(255), allowNull: false },
         status: { type: DataTypes.ENUM('UPCOMING', 'NOW_SHOWING', 'ENDED'), defaultValue: 'UPCOMING' },
         duration_minutes: { type: DataTypes.INTEGER, allowNull: true },
-        age_restriction: { type: DataTypes.INTEGER, defaultValue: 0 },
+        age_restriction: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
         created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     },
     { sequelize, modelName: 'Movie', tableName: 'Movies', timestamps: false },
