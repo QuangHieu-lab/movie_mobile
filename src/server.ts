@@ -8,6 +8,7 @@ import movieRoutes from './routes/movie.routes';
 import showtimeRoutes from './routes/showtime.routes';
 import bookingRoutes from './routes/booking.routes';
 import paymentRoutes from './routes/payment.routes';
+import snackRoutes from './routes/snack.routes';
 dotenv.config();
 
 const app = express();
@@ -25,6 +26,7 @@ app.use('/api/movies', movieRoutes);
 app.use('/api/showtimes', showtimeRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/snacks', snackRoutes);
 const startServer = async (): Promise<void> => {
     try {
         await connectDB();

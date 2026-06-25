@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/database';
 
-export type SnackType = 'POPCORN' | 'DRINK' | 'COMBO';
+export type SnackType = 'POPCORN' | 'DRINK' | 'COMBO' | 'FOOD';
 export type SnackStatus = 'AVAILABLE' | 'OUT_OF_STOCK';
 
 interface SnackAttributes {
@@ -26,7 +26,7 @@ Snack.init(
     {
         snack_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         name: { type: DataTypes.STRING(100), allowNull: false },
-        type: { type: DataTypes.ENUM('POPCORN', 'DRINK', 'COMBO'), allowNull: false },
+        type: { type: DataTypes.ENUM('POPCORN', 'DRINK', 'COMBO', 'FOOD'), allowNull: false },
         price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
         status: { type: DataTypes.ENUM('AVAILABLE', 'OUT_OF_STOCK'), defaultValue: 'AVAILABLE' },
     },

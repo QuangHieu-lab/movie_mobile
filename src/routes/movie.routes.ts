@@ -15,19 +15,95 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:movieId', async (req, res) => {
+    try {
+        const movie = await Movie.findByPk(Number(req.params.movieId));
+        if (!movie) {
+            res.status(404).json({ message: 'Movie not found' });
+            return;
+        }
+
+        res.json(movie);
+    } catch (error) {
+        res.status(500).json({ message: 'Cannot load movie', error });
+    }
+});
+
 router.post('/', async (req, res) => {
     try {
-        const { api_movie_id, title, status, duration_minutes, age_restriction } = req.body;
+        const {
+            api_movie_id,
+            title,
+            genre,
+            rating,
+            description,
+            director,
+            cast,
+            language,
+            first_showing,
+            poster_url,
+            color_primary,
+            color_secondary,
+            status,
+            duration_minutes,
+            age_restriction,
+        } = req.body;
 
         if (!api_movie_id || !title) {
             res.status(400).json({ message: 'api_movie_id and title are required' });
             return;
         }
 
-        const movie = await Movie.create({ api_movie_id, title, status, duration_minutes, age_restriction });
+        const movie = await Movie.create({
+            api_movie_id,
+            title,
+            genre,
+            rating,
+            description,
+            director,
+            cast,
+            language,
+            first_showing,
+            poster_url,
+            color_primary,
+            color_secondary,
+            status,
+            duration_minutes,
+            age_restriction,
+        });
         res.status(201).json(movie);
     } catch (error) {
         res.status(500).json({ message: 'Cannot create movie', error });
+    }
+});
+
+router.put('/:movieId', async (req, res) => {
+    try {
+        const movie = await Movie.findByPk(Number(req.params.movieId));
+        if (!movie) {
+            res.status(404).json({ message: 'Movie not found' });
+            return;
+        }
+
+        await movie.update(req.body);
+        res.json(movie);
+    } catch (error) {
+        res.status(500).json({ message: 'Cannot update movie', error });
+    }
+});
+
+router.delete('/:movieId', async (req, res) => {
+    try {
+        const movie = await Movie.findByPk(Number(req.params.movieId));
+        if (!movie) {
+            res.status(404).json({ message: 'Movie not found' });
+            return;
+        }
+
+        await movie.destroy();
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ message: 'Cannot delete movie', error });
     }
 });
 

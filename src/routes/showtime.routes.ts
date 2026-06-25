@@ -24,6 +24,26 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:showtimeId', async (req, res) => {
+    try {
+        const showtime = await Showtime.findByPk(Number(req.params.showtimeId), {
+            include: [
+                { model: Movie },
+                { model: Room },
+            ],
+        });
+
+        if (!showtime) {
+            res.status(404).json({ message: 'Showtime not found' });
+            return;
+        }
+
+        res.json(showtime);
+    } catch (error) {
+        res.status(500).json({ message: 'Cannot load showtime', error });
+    }
+});
+
 router.post('/', async (req, res) => {
     try {
         const { movie_id, room_id, start_time, end_time, price } = req.body;
@@ -57,6 +77,63 @@ router.post('/', async (req, res) => {
         res.status(201).json(showtime);
     } catch (error) {
         res.status(500).json({ message: 'Cannot create showtime', error });
+    }
+});
+
+router.put('/:showtimeId', async (req, res) => {
+    try {
+        const showtime = await Showtime.findByPk(Number(req.params.showtimeId));
+        if (!showtime) {
+            res.status(404).json({ message: 'Showtime not found' });
+            return;
+        }
+
+        const next = {
+            movie_id: req.body.movie_id ?? showtime.movie_id,
+            room_id: req.body.room_id ?? showtime.room_id,
+            start_time: req.body.start_time ? new Date(req.body.start_time) : showtime.start_time,
+            end_time: req.body.end_time ? new Date(req.body.end_time) : showtime.end_time,
+            price: req.body.price ?? showtime.price,
+        };
+
+        if (next.start_time >= next.end_time) {
+            res.status(400).json({ message: 'start_time must be before end_time' });
+            return;
+        }
+
+        const overlapping = await Showtime.findOne({
+            where: {
+                showtime_id: { [Op.ne]: showtime.showtime_id },
+                room_id: next.room_id,
+                start_time: { [Op.lt]: next.end_time },
+                end_time: { [Op.gt]: next.start_time },
+            },
+        });
+
+        if (overlapping) {
+            res.status(409).json({ message: 'Room already has a showtime in this time range' });
+            return;
+        }
+
+        await showtime.update(next);
+        res.json(showtime);
+    } catch (error) {
+        res.status(500).json({ message: 'Cannot update showtime', error });
+    }
+});
+
+router.delete('/:showtimeId', async (req, res) => {
+    try {
+        const showtime = await Showtime.findByPk(Number(req.params.showtimeId));
+        if (!showtime) {
+            res.status(404).json({ message: 'Showtime not found' });
+            return;
+        }
+
+        await showtime.destroy();
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ message: 'Cannot delete showtime', error });
     }
 });
 

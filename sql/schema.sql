@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS movie_mobile
+CREATE DATABASE IF NOT EXISTS movie_theater
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
-USE movie_mobile;
+USE movie_theater;
 
 CREATE TABLE IF NOT EXISTS Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,6 +18,16 @@ CREATE TABLE IF NOT EXISTS Movies (
     movie_id INT AUTO_INCREMENT PRIMARY KEY,
     api_movie_id VARCHAR(100) UNIQUE NOT NULL,
     title VARCHAR(255) NOT NULL,
+    genre VARCHAR(255),
+    rating VARCHAR(20),
+    description TEXT,
+    director VARCHAR(255),
+    cast JSON,
+    language VARCHAR(255),
+    first_showing VARCHAR(100),
+    poster_url VARCHAR(500),
+    color_primary VARCHAR(20),
+    color_secondary VARCHAR(20),
     status ENUM('UPCOMING', 'NOW_SHOWING', 'ENDED') DEFAULT 'UPCOMING',
     duration_minutes INT,
     age_restriction INT NOT NULL DEFAULT 0,
@@ -64,7 +74,7 @@ CREATE TABLE IF NOT EXISTS Showtimes (
 CREATE TABLE IF NOT EXISTS Snacks (
     snack_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    type ENUM('POPCORN', 'DRINK', 'COMBO') NOT NULL,
+    type ENUM('POPCORN', 'DRINK', 'COMBO', 'FOOD') NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     status ENUM('AVAILABLE', 'OUT_OF_STOCK') DEFAULT 'AVAILABLE'
 );
