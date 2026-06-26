@@ -8,6 +8,7 @@ import Showtime from './Showtime';
 import Snack from './Snack';
 import User from './User';
 import Payment from './Payment';
+import EmailOtp from './EmailOtp';
 
 User.hasMany(Booking, { foreignKey: 'user_id' });
 Booking.belongsTo(User, { foreignKey: 'user_id' });
@@ -53,4 +54,5 @@ export {
     Showtime,
     Snack,
     User,
+    EmailOtp,
 };

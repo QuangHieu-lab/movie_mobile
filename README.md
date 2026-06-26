@@ -33,12 +33,14 @@ Generated folders and runtime files such as `node_modules/`, `dist/`, logs, and 
 
 Copy `.env.example` to `.env` and update values for your local machine.
 
+See [CACH_CAI_ENV.md](CACH_CAI_ENV.md) for the complete Windows setup, Gmail OTP, and physical-device instructions.
+
 ```env
 PORT=3000
 
 DB_HOST=localhost
 DB_PORT=3306
-DB_NAME=movie_mobile
+DB_NAME=movie_theater
 DB_USER=root
 DB_PASSWORD=
 
@@ -50,15 +52,37 @@ DB_SYNC=false
 
 Use a strong `JWT_SECRET` outside local development.
 
-## Database Setup
+### Email OTP
 
-Create the database and tables from the schema:
+Registration requires an email verification code. For Gmail, create a Google App Password and place it in `SMTP_PASS`; never use or commit the normal Gmail password. The API sends a six-digit code that expires after 10 minutes, accepts at most five incorrect attempts, and allows a new code after 60 seconds.
+
+## Database Setup And Seed Data
+
+The application creates the database tables and loads sample rooms, seats, movies, showtimes, and snacks with one command:
 
 ```powershell
-Get-Content sql\schema.sql | mysql -h 127.0.0.1 -P 3306 -u root -p
+npm run db:setup
 ```
 
-The schema creates the core booking tables plus the `Payments` table used by the payment API.
+All editable sample data lives in `src/data/seed-data.ts`. Update that file, then run `npm run db:setup` again. Existing records with the same IDs are updated; this command does not delete bookings or users.
+
+### Seed Data Format
+
+Send or edit data using these fields:
+
+```text
+Movie: title, genre, rating, description, director, cast, language,
+       first_showing, status (NOW_SHOWING or UPCOMING), duration_minutes,
+       age_restriction, color_primary, color_secondary
+
+Showtime: movie_id, room_id, start_time, end_time, price
+          Dates use YYYY-MM-DDTHH:mm:ss, for example 2026-07-01T19:30:00
+
+Snack: name, type (POPCORN, COMBO, DRINK, or FOOD), price,
+       status (AVAILABLE or UNAVAILABLE)
+```
+
+Keep IDs stable when updating existing seed entries. Add a new entry with a new ID when it represents a new movie, showtime, or snack.
 
 ## Backend Commands
 
