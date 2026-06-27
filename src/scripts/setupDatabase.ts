@@ -40,6 +40,7 @@ const setupDatabase = async (): Promise<void> => {
                 'cast',
                 'language',
                 'first_showing',
+                'poster_url',
                 'status',
                 'duration_minutes',
                 'age_restriction',
