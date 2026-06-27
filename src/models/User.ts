@@ -8,10 +8,12 @@ interface UserAttributes {
     phone?: string | null;
     date_of_birth?: Date | string | null;
     password_hash: string;
+    role: 'USER' | 'ADMIN';
+    is_active: boolean;
     created_at?: Date;
 }
 
-type UserCreationAttributes = Optional<UserAttributes, 'user_id' | 'phone' | 'date_of_birth' | 'created_at'>;
+type UserCreationAttributes = Optional<UserAttributes, 'user_id' | 'phone' | 'date_of_birth' | 'created_at' | 'role' | 'is_active'>;
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public user_id!: number;
@@ -20,6 +22,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public phone!: string | null;
     public date_of_birth!: Date | string | null;
     public password_hash!: string;
+    public role!: 'USER' | 'ADMIN';
+    public is_active!: boolean;
     public created_at!: Date;
 }
 
@@ -30,7 +34,9 @@ User.init(
         email: { type: DataTypes.STRING(100), allowNull: false, unique: true },
         phone: { type: DataTypes.STRING(20), allowNull: true, unique: true },
         password_hash: { type: DataTypes.STRING(255), allowNull: false },
-        date_of_birth: { type: DataTypes.DATEONLY, allowNull: true }, // Khai báo 1 lần trong object
+        role: { type: DataTypes.ENUM('USER', 'ADMIN'), allowNull: false, defaultValue: 'USER' },
+        is_active: { type: DataTypes.TINYINT, allowNull: false, defaultValue: 1 },
+        date_of_birth: { type: DataTypes.DATEONLY, allowNull: true },
         created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     },
     {

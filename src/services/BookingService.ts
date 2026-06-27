@@ -119,6 +119,8 @@ export class BookingService {
                     showtime_id: showtimeId,
                     total_amount: totalAmount,
                     payment_method: paymentMethod,
+                    booking_status: 'CONFIRMED',
+                    payment_status: 'COMPLETED',
                 },
                 { transaction },
             );

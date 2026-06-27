@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
 
         const password_hash = await bcrypt.hash(password, 10);
         const user = await User.create({ full_name, email, phone, password_hash, date_of_birth });
-        const token = signToken(user.user_id);
+        const token = signToken(user.user_id, user.role);
 
         res.status(201).json({
             token,
@@ -32,6 +32,7 @@ router.post('/register', async (req, res) => {
                 email: user.email,
                 phone: user.phone,
                 date_of_birth: user.date_of_birth,
+                role: user.role,
             },
         });
     } catch (error) {
@@ -54,6 +55,11 @@ router.post('/login', async (req, res) => {
             return;
         }
 
+        if (!user.is_active) {
+            res.status(403).json({ message: 'Account has been disabled' });
+            return;
+        }
+
         const passwordOk = await bcrypt.compare(password, user.password_hash);
         if (!passwordOk) {
             res.status(401).json({ message: 'Invalid email or password' });
@@ -61,13 +67,14 @@ router.post('/login', async (req, res) => {
         }
 
         res.json({
-            token: signToken(user.user_id),
+            token: signToken(user.user_id, user.role),
             user: {
                 user_id: user.user_id,
                 full_name: user.full_name,
                 email: user.email,
                 phone: user.phone,
                 date_of_birth: user.date_of_birth,
+                role: user.role,
             },
         });
     } catch (error) {
