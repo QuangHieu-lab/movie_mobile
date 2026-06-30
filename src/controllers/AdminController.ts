@@ -203,7 +203,7 @@ export const getRevenue = async (req: Request, res: Response): Promise<void> => 
 
 export const cancelShowtime = async (req: Request, res: Response): Promise<void> => {
     try {
-        const showtime = await Showtime.findByPk(req.params.id);
+        const showtime = await Showtime.findByPk(Number(req.params.id));
         if (!showtime) { res.status(404).json({ message: 'Showtime not found' }); return; }
 
         const [affected] = await Booking.update(
@@ -276,7 +276,7 @@ export const getAllBookings = async (req: Request, res: Response): Promise<void>
 
 export const cancelBooking = async (req: Request, res: Response): Promise<void> => {
     try {
-        const booking = await Booking.findByPk(req.params.id);
+        const booking = await Booking.findByPk(Number(req.params.id));
         if (!booking) { res.status(404).json({ message: 'Booking not found' }); return; }
         if (booking.booking_status === 'CANCELLED') { res.status(400).json({ message: 'Already cancelled' }); return; }
 
@@ -375,7 +375,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 export const toggleUserStatus = async (req: Request, res: Response): Promise<void> => {
     try {
-        const user = await User.findByPk(req.params.id);
+        const user = await User.findByPk(Number(req.params.id));
         if (!user) { res.status(404).json({ message: 'User not found' }); return; }
 
         await user.update({ is_active: !user.is_active });
@@ -403,7 +403,7 @@ export const getRooms = async (_req: Request, res: Response): Promise<void> => {
 
 export const toggleSeatStatus = async (req: Request, res: Response): Promise<void> => {
     try {
-        const seat = await Seat.findByPk(req.params.id);
+        const seat = await Seat.findByPk(Number(req.params.id));
         if (!seat) { res.status(404).json({ message: 'Seat not found' }); return; }
 
         const newStatus = seat.physical_status === 'ACTIVE' ? 'MAINTENANCE' : 'ACTIVE';
