@@ -45,7 +45,34 @@ MAIL_FROM="Cine <your-sender@gmail.com>"
 
 `SMTP_PASS` la App Password cua Google, khong phai mat khau Gmail thuong. Khong dua gia tri nay vao GitHub.
 
-## 4. Tao du lieu mau va chay API
+## 4. Cau hinh MoMo test
+
+MoMo can bo `PARTNER_CODE`, `ACCESS_KEY`, va `SECRET_KEY` khop voi nhau. Neu dung key cu hoac sai secret, MoMo se bao loi `Chu ky khong hop le` va app Android/web se khong mo duoc link thanh toan dung.
+
+Neu chay local va can MoMo callback ve backend, tao ngrok cho port 3000:
+
+```powershell
+ngrok http 3000
+```
+
+Sau do cap nhat `.env` bang domain HTTPS moi cua ngrok:
+
+```env
+MOMO_PARTNER_CODE=your_momo_partner_code
+MOMO_ACCESS_KEY=your_momo_access_key
+MOMO_SECRET_KEY=your_momo_secret_key
+MOMO_API_URL=https://test-payment.momo.vn/v2/gateway/api/create
+MOMO_REDIRECT_URL=https://your-ngrok-domain.ngrok-free.app/api/payments/momo/return
+MOMO_IPN_URL=https://your-ngrok-domain.ngrok-free.app/api/payments/webhook
+```
+
+Luu y:
+
+- `MOMO_REDIRECT_URL` va `MOMO_IPN_URL` phai la HTTPS public URL, khong dung `localhost`.
+- Moi lan ngrok doi domain, phai cap nhat lai 2 bien tren.
+- Neu MoMo bao link/phien het han, tao lai giao dich moi trong app; link MoMo test khong nen dung lai.
+
+## 5. Tao du lieu mau va chay API
 
 ```powershell
 npm install
@@ -55,7 +82,7 @@ npm start
 
 API se chay tai `http://localhost:3000`. Android emulator ket noi den API qua `http://10.0.2.2:3000`.
 
-## 5. Neu dung dien thoai that
+## 6. Neu dung dien thoai that
 
 Chay Flutter voi IP LAN cua may tinh thay cho `10.0.2.2`:
 

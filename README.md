@@ -124,6 +124,7 @@ npm run dev
 - `POST /api/bookings`
 - `POST /api/payments/create`
 - `POST /api/payments/webhook`
+- `GET /api/payments/momo/return`
 - `GET /api/payments/status/:orderId`
 
 Booking routes require a bearer token from the auth API.

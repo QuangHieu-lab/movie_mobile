@@ -10,5 +10,6 @@ router.post('/create', PaymentController.createPayment);
 // Endpoint Webhook (KHÔNG dùng Middleware Authentication vì ví điện tử gọi trực tiếp)
 // Ví dụ: POST /api/payments/webhook
 router.post('/webhook', PaymentController.handleWebhook);
+router.get('/momo/return', PaymentController.handleReturn);
 router.get('/status/:orderId', PaymentController.getPaymentStatus);
 export default router;
